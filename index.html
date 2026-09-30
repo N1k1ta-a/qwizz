@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Для тебя ❤️</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@400;600;700&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: linear-gradient(135deg, #ffe6e6, #ffb3b3, #ff8fab);
+    background-size: 300% 300%;
+    animation: bgShift 15s ease infinite;
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: #4a4a4a;
+    overflow-x: hidden;
+}
+
+@keyframes bgShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px 30px;
+    border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(255, 105, 180, 0.35);
+    text-align: center;
+    max-width: 560px;
+    width: 100%;
+    position: relative;
+    backdrop-filter: blur(10px);
+    border: 2px solid #fff;
+    z-index: 2;
+}
+
+.slide { display: none; animation: fadeIn 0.6s ease forwards; }
+.slide.active { display: block; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.progress {
+    font-size: 0.85rem;
+    color: #d6336c;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+h1 {
+    font-family: 'Marck Script', cursive;
+    color: #d6336c;
+    font-size: 2.2rem;
+    margin-bottom: 25px;
+    line-height: 1.2;
+}
+
+h2.question {
+    font-family: 'Montserrat', sans-serif;
+    color: #333;
+    font-size: 1.25rem;
+    margin-bottom: 30px;
+    line-height: 1.5;
+    font-weight: 700;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.option-btn {
+    padding: 16px 20px;
+    font-size: 1rem;
+    border: 2px solid #ffc9d4;
+    background: #fff;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: #555;
+    text-align: center;
+}
+
+.option-btn:hover {
+    border-color: #ff4d6d;
+    background: #fff5f7;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 77, 109, 0.2);
+}
+
+.option-btn.correct {
+    background: #ff4d6d !important;
+    color: #fff !important;
+    border-color: #ff4d6d !important;
+    animation: pulse 0.5s ease;
+    cursor: default;
+}
+
+.option-btn.wrong {
+    background: #ffe0e0 !important;
+    border-color: #ff9999 !important;
+    color: #cc0000 !important;
+    animation: shake 0.4s ease;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
+
+.warm-words {
+    display: none;
+    margin-top: 25px;
+    padding: 20px;
+    background: linear-gradient(135deg, #fff0f5, #ffe4ec);
+    border-radius: 20px;
+    border-left: 5px solid #ff4d6d;
+    animation: fadeIn 0.6s ease forwards;
+}
+
+.warm-words.show { display: block; }
+
+.warm-words p {
+    font-family: 'Marck Script', cursive;
+    font-size: 1.3rem;
+    color: #d6336c;
+    line-height: 1.5;
+}
+
+.next-btn {
+    margin-top: 20px;
+    padding: 14px 40px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    background: #ff4d6d;
+    color: white;
+    box-shadow: 0 6px 18px rgba(255, 77, 109, 0.4);
+    display: none;
+}
+
+.next-btn.show { display: inline-block; }
+
+.next-btn:hover {
+    transform: scale(1.05);
+    background: #ff3355;
+}
+
+.final-text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #555;
+    margin-bottom: 20px;
+    text-align: left;
+    padding: 0 5px;
+}
+
+.final-text p { margin-bottom: 15px; }
+
+.final-heart {
+    font-size: 3rem;
+    animation: beat 1s ease infinite;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+@keyframes beat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.heart {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background: #ff4d6d;
+    transform: rotate(45deg);
+    animation: fly 4s linear infinite;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.heart::before, .heart::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    background: #ff4d6d;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.heart::before { top: -10px; left: 0; }
+.heart::after { top: 0; left: -10px; }
+
+@keyframes fly {
+    0% { transform: translateY(100vh) rotate(45deg) scale(0); opacity: 0; }
+    20% { opacity: 0.8; }
+    100% { transform: translateY(-100px) rotate(45deg) scale(1.5); opacity: 0; }
+}
+
+@media (max-width: 480px) {
+    .container { padding: 30px 20px; }
+    h1 { font-size: 1.8rem; }
+    h2.question { font-size: 1.1rem; }
+    .option-btn { padding: 14px 16px; font-size: 0.95rem; }
+    .warm-words p { font-size: 1.1rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Вопрос 1 -->
+    <div class="slide active" id="slide1">
+        <div class="progress">Вопрос 1 из 10</div>
+        <h2 class="question">Дата нашего знакомства?</h2>
+        <div class="options">
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide1', 1)">12.06.26</button>
+            <button class="option-btn" onclick="checkAnswer(this, true, 'slide1', 1)">13.06.26</button>
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide1', 1)">14.06.26</button>
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide1', 1)">13.07.26</button>
+        </div>
+        <div class="warm-words">
+            <p>Этот день я запомнил навсегда — с него началось самое тёплое лето в моей жизни 💕</p>
+            <button class="next-btn" onclick="nextSlide(2)">Дальше →</button>
+        </div>
+    </div>
+
+    <!-- Вопрос 2 -->
+    <div class="slide" id="slide2">
+        <div class="progress">Вопрос 2 из 10</div>
+        <h2 class="question">Как я чаще всего тебя называю? (выбери 2)</h2>
+        <div class="options">
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide2', 2)">Зайка</button>
+            <button class="option-btn" onclick="checkAnswer(this, true, 'slide2', 2)">Солнышко</button>
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide2', 2)">Принцесса</button>
+            <button class="option-btn" onclick="checkAnswer(this, true, 'slide2', 2)">Чудо</button>
+        </div>
+        <div class="warm-words">
+            <p>Ты и правда моё солнышко и чудо — самое тёплое и самое родное ☀️</p>
+            <button class="next-btn" onclick="nextSlide(3)">Дальше →</button>
+        </div>
+    </div>
+
+    <!-- Вопрос 3 -->
+    <div class="slide" id="slide3">
+        <div class="progress">Вопрос 3 из 10</div>
+        <h2 class="question">Помнишь ли ты нашу первую встречу?</h2>
+        <div class="options">
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide3', 1)">Нашли быстро</button>
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide3', 1)">Потерялся я</button>
+            <button class="option-btn" onclick="checkAnswer(this, true, 'slide3', 1)">Долго искали друг друга</button>
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide3', 1)">Потерялась ты</button>
+        </div>
+        <div class="warm-words">
+            <p>Мы долго искали друг друга, но нашли — и это было самое лучшее 🥰</p>
+            <button class="next-btn" onclick="nextSlide(4)">Дальше →</button>
+        </div>
+    </div>
+
+    <!-- Вопрос 4 -->
+    <div class="slide" id="slide4">
+        <div class="progress">Вопрос 4 из 10</div>
+        <h2 class="question">Наше любимое место, куда часто возвращались?</h2>
+        <div class="options">
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide4', 1)">Поклонная гора</button>
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide4', 1)">Ботанический сад</button>
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide4', 1)">Аквапарк</button>
+            <button class="option-btn" onclick="checkAnswer(this, true, 'slide4', 1)">Китайский парк</button>
+        </div>
+        <div class="warm-words">
+            <p>Китайский парк — там каждый раз было волшебно, потому что рядом была ты 🌸</p>
+            <button class="next-btn" onclick="nextSlide(5)">Дальше →</button>
+        </div>
+    </div>
+
+    <!-- Вопрос 5 -->
+    <div class="slide" id="slide5">
+        <div class="progress">Вопрос 5 из 10</div>
+        <h2 class="question">Мой любимый цвет?</h2>
+        <div class="options">
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide5', 1)">Синий</button>
+            <button class="option-btn" onclick="checkAnswer(this, true, 'slide5', 1)">Чёрный</button>
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide5', 1)">Красный</button>
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide5', 1)">Белый</button>
+        </div>
+        <div class="warm-words">
+            <p>Чёрный — как мой стиль. Но самое красивое рядом со мной — это ты 🖤</p>
+            <button class="next-btn" onclick="nextSlide(6)">Дальше →</button>
+        </div>
+    </div>
+
+    <!-- Вопрос 6 -->
+    <div class="slide" id="slide6">
+        <div class="progress">Вопрос 6 из 10</div>
+        <h2 class="question">Место, куда мы хотим сходить вместе? (выбери 2)</h2>
+        <div class="options">
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide6', 2)">Кошачье кафе</button>
+            <button class="option-btn" onclick="checkAnswer(this, true, 'slide6', 2)">Целебный парк</button>
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide6', 2)">Сиреневый парк</button>
+            <button class="option-btn" onclick="checkAnswer(this, true, 'slide6', 2)">Аквапарк</button>
+        </div>
+        <div class="warm-words">
+            <p>Скорее бы уже вместе — аквапарк и целебный парк ждут нас 🌊🌿</p>
+            <button class="next-btn" onclick="nextSlide(7)">Дальше →</button>
+        </div>
+    </div>
+
+    <!-- Вопрос 7 -->
+    <div class="slide" id="slide7">
+        <div class="progress">Вопрос 7 из 10</div>
+        <h2 class="question">Что из парного мы купили?</h2>
+        <div class="options">
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide7', 1)">Кольца</button>
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide7', 1)">Браслеты</button>
+            <button class="option-btn" onclick="checkAnswer(this, true, 'slide7', 1)">Кулоны</button>
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide7', 1)">Чехлы</button>
+        </div>
+        <div class="warm-words">
+            <p>Наши кулоны — маленький символ того, что мы всегда рядом 💫</p>
+            <button class="next-btn" onclick="nextSlide(8)">Дальше →</button>
+        </div>
+    </div>
+
+    <!-- Вопрос 8 -->
+    <div class="slide" id="slide8">
+        <div class="progress">Вопрос 8 из 10</div>
+        <h2 class="question">Что я попросил сделать для себя?</h2>
+        <div class="options">
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide8', 1)">Браслет</button>
+            <button class="option-btn" onclick="checkAnswer(this, true, 'slide8', 1)">Чехол</button>
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide8', 1)">Открытку</button>
+        </div>
+        <div class="warm-words">
+            <p>Ты сделала для меня чехол — и это дороже любой покупной вещи 🥹</p>
+            <button class="next-btn" onclick="nextSlide(9)">Дальше →</button>
+        </div>
+    </div>
+
+    <!-- Вопрос 9 -->
+    <div class="slide" id="slide9">
+        <div class="progress">Вопрос 9 из 10</div>
+        <h2 class="question">Где мы познакомились?</h2>
+        <div class="options">
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide9', 1)">PUBG</button>
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide9', 1)">HCR</button>
+            <button class="option-btn" onclick="checkAnswer(this, false, 'slide9', 1)">Genshin Impact</button>
+            <button class="option-btn" onclick="checkAnswer(this, true, 'slide9', 1)">ML (Mobile Legends)</button>
+        </div>
+        <div class="warm-words">
+            <p>Кто бы мог подумать, что игра подарит мне самого родного человека 🎮❤️</p>
+            <button class="next-btn" onclick="nextSlide(10)">Дальше →</button>
+        </div>
+    </div>
+
+    <!-- Вопрос 10 -->
+    <div class="slide" id="slide10">
+        <div class="progress">Вопрос 10 из 10</div>
+        <h2 class="question">Что для меня самое дорогое? (нажми на все)</h2>
+        <div class="options">
+            <button class="option-btn" onclick="checkAnswer(this, true, 'slide10', 4)">Наши прогулки</button>
+            <button class="option-btn" onclick="checkAnswer(this, true, 'slide10', 4)">Как ты смеёшься</button>
+            <button class="option-btn" onclick="checkAnswer(this, true, 'slide10', 4)">Наши планы</button>
+            <button class="option-btn" onclick="checkAnswer(this, true, 'slide10', 4)">Наши воспоминания</button>
+        </div>
+        <div class="warm-words">
+            <p>Всё, что связано с тобой, — моё самое дорогое. Ты моё всё 💌</p>
+            <button class="next-btn" onclick="nextSlide(11)">Финал →</button>
+        </div>
+    </div>
+
+    <!-- Финальный слайд -->
+    <div class="slide" id="slide11">
+        <h1>Моя любимая девочка</h1>
+        <div class="final-text">
+            <p>Я очень сильно люблю тебя. Всегда по тебе скучаю, переживаю и хочу поскорее увидеть.</p>
+            <p>Да, я бываю грубоват и резок, но я исправляю это и становлюсь лучше для тебя.</p>
+            <p>Ты — самое прекрасное, что случилось со мной этим летом, и я не хочу тебя потерять.</p>
+            <p>Ты — моё всё. Люблю тебя безумно.</p>
+        </div>
+        <span class="final-heart">❤️</span>
+    </div>
+
+</div>
+
+<script>
+// Счётчики правильных нажатий по каждому слайду
+const correctCounters = {};
+
+function checkAnswer(btn, isCorrect, slideId, totalCorrect) {
+    const optionsContainer = btn.parentElement;
+    const warmWords = optionsContainer.nextElementSibling;
+    const nextBtn = warmWords.querySelector('.next-btn');
+
+    // Если кнопку уже нажали правильно — игнорируем
+    if (btn.dataset.clicked === "true") return;
+
+    if (isCorrect) {
+        btn.classList.add('correct');
+        btn.dataset.clicked = "true";
+
+        // Увеличиваем счётчик правильных для этого вопроса
+        correctCounters[slideId] = (correctCounters[slideId] || 0) + 1;
+
+        // Если набрали нужное количество правильных — показываем тёплые слова
+        if (correctCounters[slideId] >= totalCorrect) {
+            optionsContainer.querySelectorAll('.option-btn').forEach(b => {
+                b.style.pointerEvents = 'none';
+            });
+
+            setTimeout(() => {
+                warmWords.classList.add('show');
+                nextBtn.classList.add('show');
+            }, 400);
+        }
+    } else {
+        btn.classList.add('wrong');
+        setTimeout(() => btn.classList.remove('wrong'), 500);
+    }
+}
+
+function nextSlide(slideNumber) {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    document.getElementById('slide' + slideNumber).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (slideNumber === 11) startHearts();
+}
+
+function startHearts() {
+    if (window.heartsStarted) return;
+    window.heartsStarted = true;
+
+    setInterval(() => {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * 100 + 'vw';
+
+        const size = Math.random() * 20 + 10;
+        heart.style.width = size + 'px';
+        heart.style.height = size + 'px';
+
+        const duration = Math.random() * 2 + 3;
+        heart.style.animationDuration = duration + 's';
+
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), duration * 1000);
+    }, 250);
+}
+</script>
+
+</body>
+</html>
